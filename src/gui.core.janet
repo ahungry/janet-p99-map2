@@ -1,3 +1,6 @@
+(import com.ahungry.gui.iup :as iup)
+(import com_ahungry_iup :as iupfixme)
+
 (import ./parse.core :as zone)
 
 (def  KEY_UP     65362)
@@ -12,7 +15,7 @@
 (def  KEY_L      108)
 
 (defn set-attr [x k v]
-  (IupSetAttribute x k v)
+  (iup/set-attribute x k v)
   x)
 
 (var  canvas           nil)
@@ -25,7 +28,7 @@
 
 (defn set-label [s]
   (when label
-    (IupSetAttribute label "TITLE" s)))
+    (iup/set-attribute label "TITLE" s)))
 
 (defn safe-redraw
   "Attempt to avoid timing issues with redraw of canvas
@@ -38,23 +41,23 @@ during setup of the IupMainLoop by intentional stagger."
     (do
       (unless safe-to-redraw?
         (set safe-to-redraw? true))
-      (IupUpdate canvas))))
+      (iup/update canvas))))
 
 (defn update-zone-label []
   (unless (= zone-label zone/current-zone-name)
     (set zone-label zone/current-zone-name)
     (set-label zone/current-zone-name)
-    (IupUpdate label)))
+    (iup/update label)))
 
 (defn add-timer []
-  (def timer (IupTimer))
-  (IupSetAttribute timer "TIME" "500")
-  (iup-set-thunk-callback
+  (def timer (iupfixme/IupTimer))
+  (iup/set-attribute timer "TIME" "500")
+  (iup/set-thunk
    timer "ACTION_CB"
    (fn [_ _]
      (update-zone-label)
      (safe-redraw)))
-  (IupSetAttribute timer "RUN" "yes")
+  (iup/set-attribute timer "RUN" "yes")
   canvas)
 
 (var scale-factor 0.1)
@@ -97,14 +100,14 @@ during setup of the IupMainLoop by intentional stagger."
 
 # Do additional mapping work in iupkey.h
 (defn bind-keys [el]
-  (iup-set-thunk-callback
+  (iup/set-thunk
    el "K_ANY"
    (fn [ih k]
      (pp "Working on K_ANY")
      (unless set-timer? (add-timer) (set set-timer? true))
      (key-handler k)
      (safe-redraw)
-     (const-IUP-DEFAULT)
+     (iupfixme/const-IUP-DEFAULT)
      ))
   el)
 
@@ -124,7 +127,7 @@ during setup of the IupMainLoop by intentional stagger."
     (-> ctx
         (set-attr "DRAWCOLOR" "100 100 100")
         (set-attr "DRAWSTYLE" "FILL")
-        (IupDrawLine
+        (iupfixme/IupDrawLine
          (+ x-offset (s->n x1))
          (+ y-offset (s->n y1))
          (+ x-offset (s->n x2))
@@ -142,7 +145,7 @@ during setup of the IupMainLoop by intentional stagger."
     (-> ctx
         (set-attr "DRAWCOLOR" "255 0 0")
         (set-attr "DRAWSTYLE" "FILL")
-        (IupDrawArc
+        (iupfixme/IupDrawArc
          sx
          sy
          (+ sx 15)
@@ -151,16 +154,16 @@ during setup of the IupMainLoop by intentional stagger."
          0.0))))
 
 (defn make-canvas []
-  (def ctx (IupCanvas "NULL"))
+  (def ctx (iupfixme/IupCanvas "NULL"))
   (set canvas ctx)
-  (iup-set-thunk-callback
+  (iup/set-thunk
    ctx "ACTION"
    (fn [ih _]
      (unless set-timer? (add-timer) (set set-timer? true))
-     (IupDrawBegin ih)
+     (iupfixme/IupDrawBegin ih)
      (set-attr ih "DRAWCOLOR" "240 240 250")
      (set-attr ih "DRAWSTYLE" "FILL")
-     (IupDrawRectangle ih 0 0 2000 2000)
+     (iupfixme/IupDrawRectangle ih 0 0 2000 2000)
 
      # Ensure we show accurate/current map
      (def points (zone/get-points))
@@ -172,34 +175,34 @@ during setup of the IupMainLoop by intentional stagger."
      (when player
        (draw-player ih player))
 
-     (IupDrawEnd ih)
+     (iupfixme/IupDrawEnd ih)
      (set drawn-once? true)
-     (const-IUP-DEFAULT)))
+     (iupfixme/const-IUP-DEFAULT)))
   ctx)
 
 (defn make-dialog [lbl ctx]
-  (def vbox (IupVbox lbl (int-ptr)))
-  (IupAppend vbox ctx)
+  (def vbox (iupfixme/IupVbox lbl (iup/int-ptr)))
+  (iup/append vbox ctx)
   (bind-keys vbox)
-  (-> (IupDialog vbox)
+  (-> (iup/dialog vbox)
       (set-attr "TITLE" "p99 mapper")
       (set-attr "SIZE" "600x300")
       #bind-keys
       ))
 
 (defn make-label []
-  (set label (IupLabel "janet-p99-map")))
+  (set label (iup/label "janet-p99-map")))
 
 (defn show-dialog [dialog]
-  (IupShowXY dialog (const-IUP-CENTER) (const-IUP-CENTER)))
+  (iup/show-xy dialog (iup/CENTER) (iup/CENTER)))
 
 (defn iup-init []
-  (IupOpen (int-ptr) (char-ptr)))
+  (iup/open (iup/int-ptr) (iup/char-ptr)))
 
 (defn main []
-  (iup-init)
+  (iup/init)
   (def canvas (make-canvas))
   (def label (make-label))
   (show-dialog (make-dialog label canvas))
   (set init-at (os/time))
-  (IupMainLoop))
+  (iup/main-loop))
