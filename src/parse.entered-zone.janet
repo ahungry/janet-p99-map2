@@ -3,8 +3,9 @@
 
 # [Fri Oct 25 13:40:49 2019] You have entered Everfrost.
 (def peg-entered-zone
-  '{:any (+ (range "09") (range "az") (range "AZ") ":" "-" " ")
-    :main (* "[" (some :any) "] You have entered " (capture (some (+ :w :s))) ".")})
+  (peg/compile
+   '{:any (+ (range "09") (range "az") (range "AZ") ":" "-" " ")
+     :main (* "[" (some :any) "] You have entered " (capture (some (+ :w :s))) ".")}))
 
 (def sample-entered-zone-line "[Fri Oct 25 13:40:49 2019] You have entered Everfrost.")
 

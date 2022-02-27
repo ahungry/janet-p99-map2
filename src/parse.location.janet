@@ -3,9 +3,10 @@
 
 # [Fri Oct 25 13:41:22 2019] Your Location is 3435.10, 562.05, -27.64
 (def peg-location
-  '{:num (capture (some (+ :d "." "-")))
-    :any (+ (range "09") (range "az") (range "AZ") ":" "-" " ")
-    :main (* "[" (some :any) "] Your Location is " :num ", " :num ", " :num)})
+  (peg/compile
+   '{:num (capture (some (+ :d "." "-")))
+     :any (+ (range "09") (range "az") (range "AZ") ":" "-" " ")
+     :main (* "[" (some :any) "] Your Location is " :num ", " :num ", " :num)}))
 
 (def sample-loc-line "[Fri Oct 25 13:41:22 2019] Your Location is 3435.10, 562.05, -27.64")
 
