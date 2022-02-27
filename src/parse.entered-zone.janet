@@ -15,4 +15,7 @@
    peg-entered-zone sample-entered-zone-line)))
 
 (defn entered-zone? [s]
-  (peg/match peg-entered-zone s))
+  (try (peg/match peg-entered-zone s)
+       ([err]
+        (pp s)
+        (pp err))))

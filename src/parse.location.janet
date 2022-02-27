@@ -16,7 +16,10 @@
    peg-location sample-loc-line)))
 
 (defn location? [s]
-  (peg/match peg-location s))
+  (try (peg/match peg-location s)
+       ([err]
+        (pp s)
+        (pp err))))
 
 (defn parse-log-line [s]
   (u/zipmap [:x :y :z] (peg/match peg-location s)))

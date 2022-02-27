@@ -142,7 +142,7 @@
       (pp lines)
       (map log-line-handler (string/split "\n" lines)))))
 
-(defn init-player [log-file]
+(defn init-logfile [log-file]
   (ev/spawn-thread
    (while true
      (do
