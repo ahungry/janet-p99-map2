@@ -15,11 +15,12 @@
    }]
  )
 
-(declare-executable
- :name "user.bin"
- :cflags ["-std=c99" "-Wall" "-Wextra"]
- :lflags
- [
-  "-L/usr/local/lib/janet/.cache/https___github.com_ahungry_ahungry-janet.git/build/linux/iup"
-  "-L/usr/local/lib/janet/.cache/https___github.com_ahungry_ahungry-janet.git/build/linux/im"]
- :entry "user.janet")
+# Not sure what I was doing with this...
+# (declare-executable
+#  :name "user.bin"
+#  :cflags ["-std=c99" "-Wall" "-Wextra"]
+#  :lflags
+#  [
+#   "-L/usr/local/lib/janet/.cache/https___github.com_ahungry_ahungry-janet.git/build/linux/iup"
+#   "-L/usr/local/lib/janet/.cache/https___github.com_ahungry_ahungry-janet.git/build/linux/im"]
+#  :entry "user.janet")
