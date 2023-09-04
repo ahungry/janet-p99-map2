@@ -1,5 +1,8 @@
 # Janet p99 Map 2
 
+FIXME: Warning!!! There is a memory leak in this at the moment -
+do not use for more than a reference perhaps.
+
 Built using the library at:
 
 https://github.com/ahungry/ahungry-janet
