@@ -15,12 +15,17 @@
    }]
  )
 
-# Not sure what I was doing with this...
-# (declare-executable
-#  :name "user.bin"
-#  :cflags ["-std=c99" "-Wall" "-Wextra"]
-#  :lflags
-#  [
-#   "-L/usr/local/lib/janet/.cache/https___github.com_ahungry_ahungry-janet.git/build/linux/iup"
-#   "-L/usr/local/lib/janet/.cache/https___github.com_ahungry_ahungry-janet.git/build/linux/im"]
-#  :entry "user.janet")
+# This works via: 'jpm build' to produce a build/mapper.bin that could be a release artifact
+(declare-executable
+ :name "mapper.bin"
+ :cflags ["-std=c99" "-Wall" "-Wextra"]
+ :lflags
+ [
+  "-L/usr/local/lib/janet/.cache/git__https___github.com_ahungry_ahungry-janet.git/deps/linux/iup"
+  "-L/usr/local/lib/janet/.cache/git__https___github.com_ahungry_ahungry-janet.git/deps/linux/im"
+  #"-L/usr/local/lib/janet/.cache/https___github.com_ahungry_ahungry-janet.git/build/linux/iup"
+  #"-L/usr/local/lib/janet/.cache/https___github.com_ahungry_ahungry-janet.git/build/linux/im"
+  ]
+ :entry "src/app.janet")
+
+# TODO: How to do the same, but with mingw...
